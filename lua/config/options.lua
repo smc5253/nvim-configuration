@@ -26,14 +26,14 @@ vim.opt.inccommand = "split"
 vim.opt.termguicolors = true
 
 -- Customize folding text
-function customfoldtext() 
+function Customfoldtext() 
   local first = vim.fn.getline(vim.v.foldstart)
   local last = vim.fn.getline(vim.v.foldend)
   local lines = vim.v.foldend - vim.v.foldstart + 1
   return "▶ " .. first .. " ... " .. last .. " [" .. lines .. " lines]"
 end
 
-vim.wo.foldtext = [[v:lua.customfoldtext()]]
+vim.wo.foldtext = [[v:lua.Customfoldtext()]]
 vim.opt.foldlevelstart = 99  -- For some reason foldlevel = 0 for initial fold, dig into this later
 
 vim.schedule(function() vim.opt.clipboard = "unnamedplus" end)
@@ -53,34 +53,35 @@ vim.diagnostic.config({
   float = {
     max_width = 90,
     wrap = true,
-    source = "always",
     border = "single",
+    focusable = true,
     close_events = {},
   }
 })
 
-local lnum, win_id = nil, nil
-
-local function close_floating_window(win_id)
-  if type(win_id) == "number" and vim.api.nvim_win_is_valid(win_id) then
-    vim.api.nvim_win_close(win_id, true)
-  end
-end
-
-vim.api.nvim_create_autocmd({"BufEnter", "CursorMoved"}, {
-  desc = "Detect line change to close floating window",
-  group = vim.api.nvim_create_augroup("diagnostic_float", {clear = true}),
-  callback = function() 
-    if lnum == nil then
-      lnum = vim.fn.line(".")
-      _, win_id = vim.diagnostic.open_float(nil)
-    else
-      local currentline = vim.fn.line(".")
-      if lnum ~= currentline then
-        close_floating_window(win_id)
-        lnum = currentline
-        _, win_id = vim.diagnostic.open_float(nil)
-      end
-    end
-  end,
-})
+-- I've found diagnostic float on cursor to be annoying
+-- local lnum, win_id = nil, nil
+--
+-- local function close_floating_window(win_id)
+--   if type(win_id) == "number" and vim.api.nvim_win_is_valid(win_id) then
+--     vim.api.nvim_win_close(win_id, true)
+--   end
+-- end
+--
+-- vim.api.nvim_create_autocmd({"BufEnter", "CursorMoved"}, {
+--   desc = "Detect line change to close floating window",
+--   group = vim.api.nvim_create_augroup("diagnostic_float", {clear = true}),
+--   callback = function() 
+--     if lnum == nil then
+--       lnum = vim.fn.line(".")
+--       _, win_id = vim.diagnostic.open_float(nil)
+--     else
+--       local currentline = vim.fn.line(".")
+--       if lnum ~= currentline then
+--         close_floating_window(win_id)
+--         lnum = currentline
+--         _, win_id = vim.diagnostic.open_float(nil)
+--       end
+--     end
+--   end,
+-- })
