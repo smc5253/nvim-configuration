@@ -9,16 +9,16 @@ vim.opt.shellslash = true
 
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.expandtab = true      -- Use spaces instead of tabs
-vim.opt.tabstop = 2           -- A tab character appears as 4 spaces
-vim.opt.shiftwidth = 2        -- Indent levels use 4 spaces
-vim.opt.softtabstop = 2       -- Pressing <Tab> inserts 4 spaces
+vim.opt.expandtab = true -- Use spaces instead of tabs
+vim.opt.tabstop = 2      -- A tab character appears as 4 spaces
+vim.opt.shiftwidth = 2   -- Indent levels use 4 spaces
+vim.opt.softtabstop = 2  -- Pressing <Tab> inserts 4 spaces
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.signcolumn = "yes"
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-vim.opt.scrolloff = 20  -- scroll offset, so the curr line is always in middle
+vim.opt.scrolloff = 20 -- scroll offset, so the curr line is always in middle
 
 vim.opt.wrap = false
 vim.opt.virtualedit = "block"
@@ -26,7 +26,7 @@ vim.opt.inccommand = "split"
 vim.opt.termguicolors = true
 
 -- Customize folding text
-function Customfoldtext() 
+function Customfoldtext()
   local first = vim.fn.getline(vim.v.foldstart)
   local last = vim.fn.getline(vim.v.foldend)
   local lines = vim.v.foldend - vim.v.foldstart + 1
@@ -34,16 +34,16 @@ function Customfoldtext()
 end
 
 vim.wo.foldtext = [[v:lua.Customfoldtext()]]
-vim.opt.foldlevelstart = 99  -- For some reason foldlevel = 0 for initial fold, dig into this later
+vim.opt.foldlevelstart = 99 -- For some reason foldlevel = 0 for initial fold, dig into this later
 
 vim.schedule(function() vim.opt.clipboard = "unnamedplus" end)
 
 vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight relevant text on yank",
-	group = vim.api.nvim_create_augroup("highlight-yank", {clear = true}),
-	callback = function()
-		vim.hl.on_yank({timeout = 250})
-	end,
+  desc = "Highlight relevant text on yank",
+  group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
+  callback = function()
+    vim.hl.on_yank({ timeout = 250 })
+  end,
 })
 
 vim.opt.updatetime = 300
@@ -71,7 +71,7 @@ vim.diagnostic.config({
 -- vim.api.nvim_create_autocmd({"BufEnter", "CursorMoved"}, {
 --   desc = "Detect line change to close floating window",
 --   group = vim.api.nvim_create_augroup("diagnostic_float", {clear = true}),
---   callback = function() 
+--   callback = function()
 --     if lnum == nil then
 --       lnum = vim.fn.line(".")
 --       _, win_id = vim.diagnostic.open_float(nil)
@@ -84,4 +84,18 @@ vim.diagnostic.config({
 --       end
 --     end
 --   end,
+-- })
+
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+-- 	group = vim.api.nvim_create_augroup("FormatOnSave", {clear = true}),
+-- 	callback = function()
+-- 		local bufnr = vim.api.nvim_get_current_buf()
+-- 		local clients = vim.lsp.get_clients({
+-- 			bufnr = bufnr,
+-- 			method = "textDocument/formatting",
+-- 		})
+-- 		for _, client in ipairs(clients) do
+-- 			vim.lsp.buf.format({async = false, bufnr = bufnr, id = client.id})
+-- 		end
+-- 	end
 -- })
