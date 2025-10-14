@@ -1,4 +1,4 @@
- vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("i", "kj", "<Esc>")
 
 -- Move lines up and down
@@ -10,6 +10,12 @@ vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { silent = true, desc = "Move to the 
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { silent = true, desc = "Move to the window to the right" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { silent = true, desc = "Move to the window above" })
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { silent = true, desc = "Move to the window below" })
+
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { noremap = true, desc = "Exit terminal mode" })
+vim.keymap.set("t", "<C-h>", "<C-w><C-h>", { silent = true, desc = "Move to the window to the left" })
+vim.keymap.set("t", "<C-l>", "<C-w><C-l>", { silent = true, desc = "Move to the window to the right" })
+vim.keymap.set("t", "<C-k>", "<C-w><C-k>", { silent = true, desc = "Move to the window above" })
+vim.keymap.set("t", "<C-j>", "<C-w><C-j>", { silent = true, desc = "Move to the window below" })
 
 -- Resize windows
 vim.keymap.set("n", "<A-h>", "<C-w><C-<>", { silent = true, desc = "current window columns - 1" })
