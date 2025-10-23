@@ -8,10 +8,10 @@ return {
 	config = function()
 		require("kanagawa").setup()
 		local now = os.date("%H:%M")
-		if parse_time(now) < parse_time("18:30") then
+		if parse_time(now) < parse_time("18:00") then
 			vim.cmd.colorscheme("kanagawa-lotus")
-    else
-      vim.cmd.colorscheme("kanagawa-dragon")
+		else
+			vim.cmd.colorscheme("kanagawa-dragon")
 		end
 	end,
 }

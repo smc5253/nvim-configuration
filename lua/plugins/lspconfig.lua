@@ -8,7 +8,7 @@ end
 
 local function toggle_diagnostic_float()
 	if win_id == nil then
-		_, win_id = vim.diagnostic.open_float(nil)
+		_, win_id = vim.diagnostic.open_float(nil, { focusable = true })
 	else
 		win_id = close_floating_window(win_id)
 	end
