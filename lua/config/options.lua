@@ -25,6 +25,13 @@ vim.opt.virtualedit = "block"
 vim.opt.inccommand = "split"
 vim.opt.termguicolors = true
 
+-- Disable intro message and other messages
+vim.opt.shortmess:append({
+  I = true,  -- No intro message
+  W = true,  -- Don't show "written" message
+  c = true,  -- Don't show completion messages
+})
+
 -- Customize folding text
 function Customfoldtext()
   local first = vim.fn.getline(vim.v.foldstart)
@@ -51,10 +58,10 @@ vim.opt.updatetime = 300
 vim.diagnostic.config({
   virtual_text = false,
   float = {
+    focusable = true,
     max_width = 90,
     wrap = true,
     border = "single",
-    focusable = true,
     close_events = {},
   }
 })

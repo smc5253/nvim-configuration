@@ -4,6 +4,9 @@ return {
 		local lint = require("lint")
 		lint.linters_by_ft = {
 			go = { "golangcilint" },
+			javascript = { "biomejs" },
+			typescript = { "biomejs" },
+			json = { "biomejs" },
 		}
 		vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
 			group = vim.api.nvim_create_augroup("lint", { clear = true }),
