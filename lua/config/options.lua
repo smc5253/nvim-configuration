@@ -43,7 +43,7 @@ end
 vim.wo.foldtext = [[v:lua.Customfoldtext()]]
 vim.opt.foldlevelstart = 99 -- For some reason foldlevel = 0 for initial fold, dig into this later
 
-vim.schedule(function() vim.opt.clipboard = "unnamedplus" end)
+vim.opt.clipboard = "unnamedplus"
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight relevant text on yank",

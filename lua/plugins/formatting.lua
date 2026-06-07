@@ -6,15 +6,19 @@ return {
 			formatters = {
 				biome = {
 					timeout_ms = 5000,
+					args = { "format", "--write", "--stdin-file-path", "$FILENAME" },
 				},
 			},
 			formatters_by_ft = {
+				javascript = { "prettierd" },
+				typescript = { "prettierd" },
+				css = { "prettierd" },
+				html = { "prettierd" },
+				json = { "prettierd" },
+				yaml = { "prettierd" },
+				markdown = { "prettierd" },
 				lua = { "stylua" },
 				go = { "goimports", "gofumpt" },
-				javascript = { "biome" },
-				typescript = { "biome" },
-				json = { "biome" },
-				jsonc = { "biome" },
 			},
 		})
 		local function formatBuffer()
