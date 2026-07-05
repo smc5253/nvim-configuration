@@ -3,15 +3,10 @@ return {
 	config = function()
 		local conform = require("conform")
 		conform.setup({
-			formatters = {
-				biome = {
-					timeout_ms = 5000,
-					args = { "format", "--write", "--stdin-file-path", "$FILENAME" },
-				},
-			},
 			formatters_by_ft = {
 				javascript = { "prettierd" },
 				typescript = { "prettierd" },
+				svelte = { "prettierd" },
 				css = { "prettierd" },
 				html = { "prettierd" },
 				json = { "prettierd" },

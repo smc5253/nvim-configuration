@@ -1,5 +1,10 @@
 local win_id, l_num = nil, nil
 
+local custom_servers = {
+	svelte = true,
+	lua_ls = true,
+}
+
 local function close_floating_window(winid)
 	if type(winid) == "number" and vim.api.nvim_win_is_valid(winid) then
 		win_id = vim.api.nvim_win_close(winid, true)
@@ -14,28 +19,35 @@ local function toggle_diagnostic_float()
 	end
 end
 
-local lsp_on_attach = function(server)
-	local default_on_attach = vim.lsp.config[server].on_attach
+local function set_lsp_keymaps(bufnr)
+	vim.keymap.set("n", "gd", vim.lsp.buf.definition, { silent = true, buffer = bufnr, desc = "Go to definition" })
+	vim.keymap.set("n", "gh", vim.lsp.buf.hover, { silent = true, buffer = bufnr, desc = "Go to hover" })
+	vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { silent = true, buffer = bufnr, desc = "Rename symbol" })
+	vim.keymap.set(
+		"n",
+		"gi",
+		vim.lsp.buf.implementation,
+		{ silent = true, buffer = bufnr, desc = "Go to implementation" }
+	)
+	vim.keymap.set("n", "gr", vim.lsp.buf.references, { silent = true, buffer = bufnr, desc = "Go to references" })
+	vim.keymap.set(
+		"n",
+		"gt",
+		vim.lsp.buf.type_definition,
+		{ silent = true, buffer = bufnr, desc = "Go to type definition" }
+	)
+end
+
+local lsp_on_attach = function(server, cb)
+	local default_on_attach = vim.lsp.config[server] and vim.lsp.config[server].on_attach
 	return function(client, bufnr)
 		if default_on_attach then
 			default_on_attach(client, bufnr)
 		end
-		vim.keymap.set("n", "gd", vim.lsp.buf.definition, { silent = true, buffer = bufnr, desc = "Go to definition" })
-		vim.keymap.set("n", "gh", vim.lsp.buf.hover, { silent = true, buffer = bufnr, desc = "Go to hover" })
-		vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { silent = true, buffer = bufnr, desc = "Rename symbol" })
-		vim.keymap.set(
-			"n",
-			"gi",
-			vim.lsp.buf.implementation,
-			{ silent = true, buffer = bufnr, desc = "Go to implementation" }
-		)
-		vim.keymap.set("n", "gr", vim.lsp.buf.references, { silent = true, buffer = bufnr, desc = "Go to references" })
-		vim.keymap.set(
-			"n",
-			"gt",
-			vim.lsp.buf.type_definition,
-			{ silent = true, buffer = bufnr, desc = "Go to type definition" }
-		)
+		set_lsp_keymaps(bufnr)
+		if cb then
+			cb(client, bufnr)
+		end
 	end
 end
 
@@ -82,10 +94,24 @@ return {
 		local installed = require("mason-lspconfig").get_installed_servers()
 
 		for _, server in ipairs(installed) do
-			vim.lsp.config(server, {
-				on_attach = lsp_on_attach(server),
-			})
+			if not custom_servers[server] then
+				vim.lsp.config(server, {
+					on_attach = lsp_on_attach(server),
+				})
+			end
 		end
+
+		vim.lsp.config("svelte", {
+			on_attach = lsp_on_attach("svelte", function(client, bufnr)
+				vim.api.nvim_create_autocmd("BufWritePost", {
+					pattern = { "*.js", "*.ts" },
+					group = vim.api.nvim_create_augroup("svelte-cross-file", { clear = false }),
+					callback = function(ctx)
+						client:notify("$/onDidChangeTsOrJsFile", { uri = ctx.match })
+					end,
+				})
+			end),
+		})
 
 		vim.lsp.config("lua_ls", {
 			on_init = function(client)

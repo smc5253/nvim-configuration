@@ -7,6 +7,7 @@ return {
 			css = { "stylelint" },
 			javascript = { "eslint_d" },
 			typescript = { "eslint_d" },
+			svelte = { "eslint_d" },
 			go = { "golangcilint" },
 			json = { "biomejs" },
 		}
@@ -15,7 +16,7 @@ return {
 			callback = function()
 				local ok, err = pcall(require("lint").try_lint)
 				if not ok then
-				vim.notify("Linting failed " .. err, vim.log.levels.ERROR)
+					vim.notify("Linting failed " .. err, vim.log.levels.ERROR)
 				end
 			end,
 		})
